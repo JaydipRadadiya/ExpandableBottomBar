@@ -79,11 +79,12 @@ internal class ExpandableBottomBarParser(private val context: Context) {
         val id = typedArray.getResourceId(R.styleable.ExpandableBottomBarItem_android_id, NO_ID)
         val iconId = typedArray.getResourceId(R.styleable.ExpandableBottomBarItem_exb_icon, NO_ID)
         val color = typedArray.getColor(R.styleable.ExpandableBottomBarItem_exb_color, NO_COLOR)
+        val rippleColor = typedArray.getColor(R.styleable.ExpandableBottomBarItem_exb_rippleColor, NO_COLOR)
         val text = typedArray.getString(R.styleable.ExpandableBottomBarItem_android_title) ?: NO_TEXT
 
         typedArray.recycle()
 
         parser.require(XmlPullParser.START_TAG, namespace, MENU_ITEM_TAG)
-        return ExpandableBottomBarMenuItem(id, iconId, text, color)
+        return ExpandableBottomBarMenuItem(id, iconId, text, color, rippleColor)
     }
 }

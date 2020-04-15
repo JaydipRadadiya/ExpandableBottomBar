@@ -13,7 +13,8 @@ data class ExpandableBottomBarMenuItem(
     @IdRes val itemId: Int,
     @DrawableRes val iconId: Int,
     val text: CharSequence?,
-    @ColorInt val activeColor: Int
+    @ColorInt val activeColor: Int,
+    @ColorInt val activeRippleColor: Int = Color.TRANSPARENT
 ) {
     class ItemBuildRequest internal constructor(private val builder: Builder, private val context: Context) {
 
@@ -23,6 +24,7 @@ data class ExpandableBottomBarMenuItem(
         private var iconId: Int = 0
         var text: CharSequence? = null
         var activeColor: Int? = null
+        var activeRippleColor: Int? = null
 
         fun id(@IdRes id: Int): ItemBuildRequest {
             this.itemId = id
@@ -54,10 +56,21 @@ data class ExpandableBottomBarMenuItem(
             return this
         }
 
+        fun rippleColor(@ColorInt color: Int): ItemBuildRequest {
+            this.activeRippleColor = color
+            return this
+        }
+
+        fun rippleColorRes(@ColorRes colorId: Int): ItemBuildRequest {
+            this.activeRippleColor = ContextCompat.getColor(context, colorId)
+            return this
+        }
+
         private fun assertValidity() {
             if (itemId == 0 ||
                 iconId == 0 ||
-                activeColor == null
+                activeColor == null ||
+                activeRippleColor == null
             ) {
                 throw IllegalStateException("Menu Item not constructed properly")
             }
@@ -65,7 +78,7 @@ data class ExpandableBottomBarMenuItem(
 
         fun create(): Builder {
             assertValidity()
-            builder.items.add(ExpandableBottomBarMenuItem(itemId, iconId, text, activeColor!!))
+            builder.items.add(ExpandableBottomBarMenuItem(itemId, iconId, text, activeColor!!, activeRippleColor!!))
             return builder
         }
     }
@@ -85,8 +98,9 @@ data class ExpandableBottomBarMenuItem(
             @IdRes itemId: Int,
             @DrawableRes iconId: Int,
             @StringRes textId: Int,
-            @ColorInt activeColor: Int = Color.BLACK
-        ) = ItemBuildRequest(this, context).id(itemId).icon(iconId).textRes(textId).color(activeColor).create()
+            @ColorInt activeColor: Int = Color.BLACK,
+            @ColorInt activeRippleColor: Int = Color.BLACK
+        ) = ItemBuildRequest(this, context).id(itemId).icon(iconId).textRes(textId).color(activeColor).rippleColor(activeRippleColor).create()
 
         fun build(): List<ExpandableBottomBarMenuItem> = items
     }

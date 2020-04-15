@@ -8,12 +8,12 @@ import github.com.st235.lib_expandablebottombar.ExpandableBottomBarMenuItem
 import github.com.st235.lib_expandablebottombar.R
 import github.com.st235.lib_expandablebottombar.controllers.ItemViewController
 import github.com.st235.lib_expandablebottombar.controllers.IconOnlyItemViewController
-import github.com.st235.lib_expandablebottombar.utils.BackgroundFactory
+import github.com.st235.lib_expandablebottombar.utils.ItemBackgroundFactory
 
 internal class ShortItemViewControllerFactory(
     menuItem: ExpandableBottomBarMenuItem,
-    backgroundFactory: BackgroundFactory
-): ViewControllerFactory(menuItem, backgroundFactory) {
+    itemBackgroundFactory: ItemBackgroundFactory
+): ViewControllerFactory(menuItem, itemBackgroundFactory) {
 
     override fun build(context: Context): ItemViewController {
         val itemView = createFrameLayout(context)
@@ -28,9 +28,11 @@ internal class ShortItemViewControllerFactory(
             menuItem = menuItem,
             itemView = itemView,
             iconView = iconView,
+            backgroundColor = backgroundColor,
+            inactiveColorRipple = inactiveRippleColor,
             backgroundCornerRadius = backgroundCornerRadius,
             backgroundOpacity = backgroundOpacity,
-            backgroundFactory = backgroundFactory
+            itemBackgroundFactory = itemBackgroundFactory
         )
     }
 

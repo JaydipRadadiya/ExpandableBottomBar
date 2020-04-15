@@ -1,15 +1,12 @@
 package github.com.st235.lib_expandablebottombar.controllers
 
-import android.graphics.drawable.Drawable
 import android.view.View
-import androidx.annotation.VisibleForTesting
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.AccessibilityDelegateCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import github.com.st235.lib_expandablebottombar.ExpandableBottomBarMenuItem
-import github.com.st235.lib_expandablebottombar.utils.DrawableHelper
 import github.com.st235.lib_expandablebottombar.utils.createChain
 
 internal abstract class ItemViewController {

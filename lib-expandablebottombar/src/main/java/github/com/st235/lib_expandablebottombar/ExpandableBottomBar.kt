@@ -21,7 +21,7 @@ import github.com.st235.lib_expandablebottombar.controllers.ItemViewController
 import github.com.st235.lib_expandablebottombar.controllers.factory.ViewControllerFactory
 import github.com.st235.lib_expandablebottombar.parsers.ExpandableBottomBarParser
 import github.com.st235.lib_expandablebottombar.state.SavedState
-import github.com.st235.lib_expandablebottombar.utils.BackgroundFactory
+import github.com.st235.lib_expandablebottombar.utils.ItemBackgroundFactory
 import github.com.st235.lib_expandablebottombar.utils.DrawableHelper
 import github.com.st235.lib_expandablebottombar.utils.applyForApiLAndHigher
 import github.com.st235.lib_expandablebottombar.utils.toPx
@@ -46,7 +46,9 @@ class ExpandableBottomBar @JvmOverloads constructor(
     @IntRange(from = 0) private var menuVerticalPadding: Int = 0
     private var itemMode: ItemsMode = ItemsMode.DEFAULT
 
+    @ColorInt private var bgColor: Int = Color.BLACK
     @ColorInt private var itemInactiveColor: Int = Color.BLACK
+    @ColorInt private var itemInactiveRippleColor: Int = Color.BLACK
     private val backgroundStates
             = arrayOf(
         intArrayOf(android.R.attr.state_selected),
@@ -59,7 +61,7 @@ class ExpandableBottomBar @JvmOverloads constructor(
 
     private val viewControllers: MutableMap<Int, ItemViewController> = mutableMapOf()
     private val stateController = ExpandableBottomBarStateController(this)
-    private val backgroundFactory = BackgroundFactory()
+    private val backgroundFactory = ItemBackgroundFactory()
 
     var onItemSelectedListener: OnItemClickListener? = null
     var onItemReselectedListener: OnItemClickListener? = null
@@ -84,6 +86,7 @@ class ExpandableBottomBar @JvmOverloads constructor(
         itemMode = ItemsMode.fromValue(typedArray.getInt(R.styleable.ExpandableBottomBar_exb_itemsMode, 0))
         backgroundOpacity = typedArray.getFloat(R.styleable.ExpandableBottomBar_exb_itemBackgroundOpacity, 0.2F)
         backgroundCornerRadius = typedArray.getDimension(R.styleable.ExpandableBottomBar_exb_itemBackgroundCornerRadius, 30F.toPx())
+        itemInactiveRippleColor = typedArray.getColor(R.styleable.ExpandableBottomBar_exb_itemInactiveRippleColor, Color.TRANSPARENT)
         transitionDuration = typedArray.getInt(R.styleable.ExpandableBottomBar_exb_transitionDuration, 100)
         itemInactiveColor = typedArray.getColor(R.styleable.ExpandableBottomBar_exb_itemInactiveColor, Color.BLACK)
         menuItemHorizontalMargin = typedArray.getDimension(R.styleable.ExpandableBottomBar_exb_item_horizontal_margin, 5F.toPx()).toInt()
@@ -91,11 +94,11 @@ class ExpandableBottomBar @JvmOverloads constructor(
         menuHorizontalPadding = typedArray.getDimension(R.styleable.ExpandableBottomBar_exb_item_horizontal_padding, 15F.toPx()).toInt()
         menuVerticalPadding = typedArray.getDimension(R.styleable.ExpandableBottomBar_exb_item_vertical_padding, 10F.toPx()).toInt()
 
-        val backgroundColor = typedArray.getColor(R.styleable.ExpandableBottomBar_exb_backgroundColor, Color.WHITE)
+        bgColor = typedArray.getColor(R.styleable.ExpandableBottomBar_exb_backgroundColor, Color.WHITE)
         val backgroundCornerRadius = typedArray.getDimension(R.styleable.ExpandableBottomBar_exb_backgroundCornerRadius, 0F)
 
         background =
-            DrawableHelper.createShapeDrawable(backgroundColor, backgroundCornerRadius, 1.0F)
+            DrawableHelper.createShapeDrawable(bgColor, backgroundCornerRadius, 1.0F)
 
         applyForApiLAndHigher {
             elevation = typedArray.getDimension(R.styleable.ExpandableBottomBar_exb_elevation, 16F.toPx())
@@ -193,8 +196,10 @@ class ExpandableBottomBar @JvmOverloads constructor(
             ViewControllerFactory.from(
                 menuItem = menuItem,
                 itemsMode = itemMode,
-                backgroundFactory = backgroundFactory
+                itemBackgroundFactory = backgroundFactory
             )
+                .backgroundColor(bgColor)
+                .inactiveRippleColor(itemInactiveRippleColor)
                 .itemMargins(menuHorizontalPadding, menuVerticalPadding)
                 .itemBackground(backgroundCornerRadius, backgroundOpacity)
                 .itemsColors(selectedStateColorList)
@@ -210,6 +215,8 @@ class ExpandableBottomBar @JvmOverloads constructor(
 
         if (selectedItemId == menuItem.itemId) {
             viewController.select()
+        } else {
+            viewController.deselect()
         }
 
         return viewController

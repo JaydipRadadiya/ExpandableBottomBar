@@ -4,17 +4,20 @@
         android:id="@+id/home"
         android:title="@string/text"
         app:exb_color="#FF8888"
+        app:exb_rippleColor="#FF0000"
         app:exb_icon="@drawable/ic_home" />
 
     <item
         android:id="@+id/settings"
         android:title="@string/text4"
         app:exb_color="@color/colorSettings"
+        app:exb_rippleColor="#0000FF"
         app:exb_icon="@drawable/ic_settings" />
 
     <item
         android:id="@+id/bookmarks"
         android:title="@string/text3"
         app:exb_color="#fa2"
+        app:exb_rippleColor="#FFCC00"
         app:exb_icon="@drawable/ic_bookmarks" />
 </menu>

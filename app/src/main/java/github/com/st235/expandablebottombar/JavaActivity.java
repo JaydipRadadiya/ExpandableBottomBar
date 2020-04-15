@@ -23,10 +23,10 @@ public class JavaActivity extends AppCompatActivity {
 
         bottomBar.addItems(
                 new ExpandableBottomBarMenuItem.Builder(this)
-                        .addItem(R.id.icon_home, R.drawable.ic_home, R.string.text, Color.GRAY)
-                        .addItem(R.id.icon_likes, R.drawable.ic_likes, R.string.text2, 0xffff77a9)
-                        .addItem(R.id.icon_bookmarks, R.drawable.ic_bookmarks, R.string.text3, 0xff58a5f0)
-                        .addItem(R.id.icon_settings, R.drawable.ic_settings, R.string.text4, 0xffbe9c91)
+                        .addItem(R.id.icon_home, R.drawable.ic_home, R.string.text, Color.GRAY, Color.BLACK)
+                        .addItem(R.id.icon_likes, R.drawable.ic_likes, R.string.text2, 0xffff77a9, 0xffff22a9)
+                        .addItem(R.id.icon_bookmarks, R.drawable.ic_bookmarks, R.string.text3, 0xff58a5f0, 0xff5811f0)
+                        .addItem(R.id.icon_settings, R.drawable.ic_settings, R.string.text4, 0xffbe9c91, 0xffbe0091)
                         .build()
         );
 

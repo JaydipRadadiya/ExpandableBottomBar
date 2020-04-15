@@ -3,9 +3,21 @@ package github.com.st235.lib_expandablebottombar.utils
 import android.os.Build
 import android.view.View
 
-typealias Scope = () -> Unit
+typealias Scope<T> = () -> T
 
-internal inline fun applyForApiLAndHigher(scope: Scope) {
+internal inline fun <T> applyOnApi(
+    apiLevel: Int,
+    aboveScope: Scope<T>,
+    belowScope: Scope<T>
+): T {
+    return if (Build.VERSION.SDK_INT < apiLevel) {
+        belowScope()
+    } else {
+        aboveScope()
+    }
+}
+
+internal inline fun applyForApiLAndHigher(scope: Scope<Unit>) {
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
         scope()
     }
