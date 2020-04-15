@@ -22,6 +22,12 @@
         <attr name="exb_item_horizontal_padding" format="dimension" />
 
         <attr name="exb_items" format="reference" />
+
+        <attr name="exb_itemsMode" format="enum">
+            <enum name="default_mode" value="0" />
+            <enum name="short_mode" value="1" />
+            <enum name="underline_mode" value="2" />
+        </attr>
     </declare-styleable>
 
     <attr name="exb_expandableButtonBarDefaultStyle" format="reference" />

@@ -17,8 +17,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import github.com.st235.lib_expandablebottombar.behavior.ExpandableBottomBarBehavior
+import github.com.st235.lib_expandablebottombar.controllers.ItemViewController
+import github.com.st235.lib_expandablebottombar.controllers.factory.ViewControllerFactory
 import github.com.st235.lib_expandablebottombar.parsers.ExpandableBottomBarParser
 import github.com.st235.lib_expandablebottombar.state.SavedState
+import github.com.st235.lib_expandablebottombar.utils.BackgroundFactory
 import github.com.st235.lib_expandablebottombar.utils.DrawableHelper
 import github.com.st235.lib_expandablebottombar.utils.applyForApiLAndHigher
 import github.com.st235.lib_expandablebottombar.utils.toPx
@@ -41,6 +44,7 @@ class ExpandableBottomBar @JvmOverloads constructor(
     @IntRange(from = 0) private var menuItemVerticalMargin: Int = 0
     @IntRange(from = 0) private var menuHorizontalPadding: Int = 0
     @IntRange(from = 0) private var menuVerticalPadding: Int = 0
+    private var itemMode: ItemsMode = ItemsMode.DEFAULT
 
     @ColorInt private var itemInactiveColor: Int = Color.BLACK
     private val backgroundStates
@@ -53,8 +57,9 @@ class ExpandableBottomBar @JvmOverloads constructor(
 
     @IdRes private var selectedItemId: Int = ITEM_NOT_SELECTED
 
-    private val viewControllers: MutableMap<Int, ExpandableItemViewController> = mutableMapOf()
+    private val viewControllers: MutableMap<Int, ItemViewController> = mutableMapOf()
     private val stateController = ExpandableBottomBarStateController(this)
+    private val backgroundFactory = BackgroundFactory()
 
     var onItemSelectedListener: OnItemClickListener? = null
     var onItemReselectedListener: OnItemClickListener? = null
@@ -76,6 +81,7 @@ class ExpandableBottomBar @JvmOverloads constructor(
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.ExpandableBottomBar,
             defStyleAttr, R.style.ExpandableBottomBar)
 
+        itemMode = ItemsMode.fromValue(typedArray.getInt(R.styleable.ExpandableBottomBar_exb_itemsMode, 0))
         backgroundOpacity = typedArray.getFloat(R.styleable.ExpandableBottomBar_exb_itemBackgroundOpacity, 0.2F)
         backgroundCornerRadius = typedArray.getDimension(R.styleable.ExpandableBottomBar_exb_itemBackgroundCornerRadius, 30F.toPx())
         transitionDuration = typedArray.getInt(R.styleable.ExpandableBottomBar_exb_transitionDuration, 100)
@@ -179,12 +185,16 @@ class ExpandableBottomBar @JvmOverloads constructor(
         }
     }
 
-    private fun createItem(menuItem: ExpandableBottomBarMenuItem): ExpandableItemViewController {
+    private fun createItem(menuItem: ExpandableBottomBarMenuItem): ItemViewController {
         val colors = intArrayOf(menuItem.activeColor, itemInactiveColor)
         val selectedStateColorList = ColorStateList(backgroundStates, colors)
 
         val viewController =
-            ExpandableItemViewController.Builder(menuItem)
+            ViewControllerFactory.from(
+                menuItem = menuItem,
+                itemsMode = itemMode,
+                backgroundFactory = backgroundFactory
+            )
                 .itemMargins(menuHorizontalPadding, menuVerticalPadding)
                 .itemBackground(backgroundCornerRadius, backgroundOpacity)
                 .itemsColors(selectedStateColorList)
@@ -238,6 +248,17 @@ class ExpandableBottomBar @JvmOverloads constructor(
             val selectedItemId = state.selectedItem
             val viewController = expandableBottomBar.viewControllers.getValue(selectedItemId)
             expandableBottomBar.onItemSelected(viewController.menuItem)
+        }
+    }
+
+    internal enum class ItemsMode(
+        private val id: Int
+    ) {
+        DEFAULT(0), SHORT(1), UNDERLINE(2);
+
+        companion object {
+            fun fromValue(value: Int): ItemsMode =
+                values().find { it.id == value } ?: throw IllegalStateException("Cannot cast $this to items mode")
         }
     }
 }

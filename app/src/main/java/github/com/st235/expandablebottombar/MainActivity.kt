@@ -19,6 +19,8 @@ class MainActivity : AppCompatActivity() {
         addButton(rootView, "Java Interop with Expandable Menu", JavaActivity::class.java)
         addButton(rootView, "Coordinator Layout Behavior", CoordinatorLayoutActivity::class.java)
         addButton(rootView, "Coordinator Layout Scrollable Behavior", ScrollableCoordinatorLayoutActivity::class.java)
+        addButton(rootView, "Short menu", ShortMenuActivity::class.java)
+        addButton(rootView, "Underline menu", UnderlineMenuActivity::class.java)
     }
 
     private fun addButton(root: ViewGroup,

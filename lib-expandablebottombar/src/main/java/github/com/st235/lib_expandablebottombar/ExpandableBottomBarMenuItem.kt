@@ -12,7 +12,7 @@ import java.lang.IllegalStateException
 data class ExpandableBottomBarMenuItem(
     @IdRes val itemId: Int,
     @DrawableRes val iconId: Int,
-    val text: CharSequence,
+    val text: CharSequence?,
     @ColorInt val activeColor: Int
 ) {
     class ItemBuildRequest internal constructor(private val builder: Builder, private val context: Context) {
@@ -57,7 +57,6 @@ data class ExpandableBottomBarMenuItem(
         private fun assertValidity() {
             if (itemId == 0 ||
                 iconId == 0 ||
-                text == null ||
                 activeColor == null
             ) {
                 throw IllegalStateException("Menu Item not constructed properly")
@@ -66,7 +65,7 @@ data class ExpandableBottomBarMenuItem(
 
         fun create(): Builder {
             assertValidity()
-            builder.items.add(ExpandableBottomBarMenuItem(itemId, iconId, text!!, activeColor!!))
+            builder.items.add(ExpandableBottomBarMenuItem(itemId, iconId, text, activeColor!!))
             return builder
         }
     }
