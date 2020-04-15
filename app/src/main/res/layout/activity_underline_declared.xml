@@ -19,7 +19,8 @@
         app:exb_itemsMode="underline_mode"
         app:exb_backgroundCornerRadius="0dp"
         app:exb_item_horizontal_padding="16dp"
-        app:exb_item_vertical_padding="4dp"
+        app:exb_item_vertical_padding="8dp"
+        app:exb_itemBackgroundCornerRadius="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

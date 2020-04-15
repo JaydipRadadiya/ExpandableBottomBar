@@ -17,6 +17,8 @@
         android:layout_height="wrap_content"
         app:exb_items="@menu/short_bottom_bar"
         app:exb_itemsMode="short_mode"
+        app:exb_item_vertical_padding="16dp"
+        app:exb_item_horizontal_padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
